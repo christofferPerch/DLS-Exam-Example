@@ -1,0 +1,21 @@
+version: '3.8'
+services:
+  dotnet-app:
+    image: chris2750/dls-exam-example:latest
+    ports:
+      - "80:8080"  # Map external port 80 to internal port 8080
+    deploy:
+      replicas: 2  # Number of replicas for scaling
+      update_config:
+        parallelism: 1
+        delay: 10s
+      restart_policy:
+        condition: on-failure
+    environment:
+      DOTNET_RUNNING_IN_CONTAINER: "true"  # Helps with container detection
+    networks:
+      - swarm-network
+
+networks:
+  swarm-network:
+    driver: overlay

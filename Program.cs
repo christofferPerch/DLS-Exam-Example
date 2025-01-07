@@ -23,8 +23,9 @@ app.MapGet("/", context =>
     return Task.CompletedTask;
 });
 
-app.UseHttpsRedirection();
+//app.UseHttpsRedirection();
 app.UseAuthorization();
+app.Urls.Add("http://*:8080"); // Allow the app to bind to port 8080
 
 // Add Prometheus metrics middleware
 app.UseHttpMetrics(); // Captures HTTP-related metrics
