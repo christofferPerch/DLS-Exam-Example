@@ -25,5 +25,5 @@ jobs:
         context: .
         file: Dockerfile
         push: true
-        tags: chris2750/dls-exam-example:project
+        tags: chris2750/dls-exam-example:latest
 
