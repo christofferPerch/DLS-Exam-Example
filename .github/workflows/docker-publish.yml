@@ -30,7 +30,6 @@ jobs:
           push: true
           tags: chris2750/dls-exam-example:latest
 
-      # Step 4: SSH into Linode and Deploy the Latest Stack
       - name: Deploy to Linode Docker Swarm
         uses: appleboy/ssh-action@v0.1.5
         with:
