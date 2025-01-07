@@ -1,4 +1,4 @@
-using Prometheus; // Add this using directive
+using Prometheus; 
 
 var builder = WebApplication.CreateBuilder(args);
 
