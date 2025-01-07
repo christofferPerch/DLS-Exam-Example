@@ -30,6 +30,19 @@ jobs:
           push: true
           tags: chris2750/dls-exam-example:latest
 
+      # Step 4: Copy docker-swarm.yml to Linode
+      - name: Copy docker-swarm.yml to Linode
+        uses: appleboy/scp-action@v0.1.0
+        with:
+          host: ${{ secrets.LINODE_HOST }}
+          username: ${{ secrets.LINODE_USER }}
+          key: ${{ secrets.LINODE_SSH_KEY }}
+          passphrase: ${{ secrets.SSH_PASSPHRASE }}
+          port: 22
+          source: ./docker-swarm.yml  # Path to the file in your repo
+          target: /home/${{ secrets.LINODE_USER }}/deploy/  # Path where you want the file to go
+
+      # Step 5: Deploy the stack
       - name: Deploy to Linode Docker Swarm
         uses: appleboy/ssh-action@v0.1.5
         with:
@@ -45,5 +58,5 @@ jobs:
             docker stack rm dotnet-app-stack || true
             sleep 5  # Small delay to ensure the stack is removed
             echo "Deploying the new stack..."
-            docker stack deploy -c ~/path/to/docker-swarm.yml dotnet-app-stack
+            docker stack deploy -c /home/${{ secrets.LINODE_USER }}/deploy/docker-swarm.yml dotnet-app-stack
             echo "Deployment successful!"
