@@ -17,7 +17,6 @@ if (app.Environment.IsDevelopment())
     app.UseSwaggerUI();
 }
 
-// Redirect root URL to Swagger UI
 app.MapGet("/", context =>
 {
     context.Response.Redirect("/swagger/index.html");
