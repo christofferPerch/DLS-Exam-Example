@@ -1,21 +1,21 @@
-using Prometheus; 
+using Prometheus;
 
 var builder = WebApplication.CreateBuilder(args);
 
 // Add services to the container.
 builder.Services.AddControllers();
-// Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
 
 var app = builder.Build();
 
-// Configure the HTTP request pipeline.
-if (app.Environment.IsDevelopment())
+// Enable Swagger in all environments
+app.UseSwagger();
+app.UseSwaggerUI(c =>
 {
-    app.UseSwagger();
-    app.UseSwaggerUI();
-}
+    c.SwaggerEndpoint("/swagger/v1/swagger.json", "API v1");
+    c.RoutePrefix = string.Empty; // Serve Swagger UI at root URL
+});
 
 app.MapGet("/", context =>
 {
@@ -23,15 +23,9 @@ app.MapGet("/", context =>
     return Task.CompletedTask;
 });
 
-//app.UseHttpsRedirection();
+// app.UseHttpsRedirection();  // Disabled for direct IP access
 app.UseAuthorization();
-app.Urls.Add("http://*:8080"); // Allow the app to bind to port 8080
-
-// Add Prometheus metrics middleware
-app.UseHttpMetrics(); // Captures HTTP-related metrics
-
-// Expose /metrics endpoint for Prometheus
-app.MapMetrics();
-
+app.UseHttpMetrics(); // Prometheus middleware
+app.MapMetrics();     // Expose /metrics endpoint for Prometheus
 app.MapControllers();
 app.Run();
